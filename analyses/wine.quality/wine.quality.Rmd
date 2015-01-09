@@ -1,0 +1,229 @@
+---
+title: "Predicting Wine Quality in Reds and Whites"
+author: "Darion Lawson"
+output:
+  html_document:
+    css: markdown2.css
+    theme: cerulean
+    toc: yes
+    
+---
+# Introduction
+This analysis takes a look at physicochemical analysis data collected form red wine and white wine samples plus quality ratings assigned to each sample by wine experts. A random forest model is built to predict quality rating from the chemical properties of wine.
+
+Data was obtained from [UCI Data Repository](http://archive.ics.uci.edu/ml/datasets/Wine+Quality) and was contributed by Paulo Cortez, University of Minho, Guimaraes, Portugal.
+
+# Import Packages
+```{r importdata, message=FALSE, warning = FALSE, error=FALSE, results=FALSE}
+source("C:/_stuff/r.code.snippets/all.imports.R")
+```
+
+# Load Data
+There are two datasets one each for the red and white variants of the Portuguese "Vinho Verde" wine. The variables are chemical characterstics of the wines. The response is the Quality rating assigned by wine experts (the median of at least 3 evaluations) expert graded the wine quality. Ratings are 0 (very bad) and 10 (very excellent). 
+
+```{r loaddata}
+wine.r <- read.csv("C:/_data/wine.quality/winequality-red.csv", sep=";")
+wine.w <- read.csv("C:/_data/wine.quality/winequality-white.csv", sep=";")
+
+wine.r$quality <- as.factor(wine.r$quality)
+wine.w$quality <- as.factor(wine.w$quality)
+
+str(wine.w);str(wine.r)
+```
+
+# Exploratory Data Analysis
+
+Plot the individual variables against quality.
+
+```{r plots, fig.width=9, fig.height=5, echo=FALSE}
+#Individual plots
+p1 <- qplot(wine.r$quality,wine.r$fixed.acidity, ylab="Fixed Acidity", xlab=" Quality Rating", 
+            main="Fixed Acidity by Quality Level")  + geom_boxplot() + geom_jitter(alpha=0.7) +
+  theme_light(base_size = 14)
+
+p2 <- qplot(wine.r$quality,wine.r$volatile.acidity, ylab="Volatile Acidity", xlab=" Quality Rating", 
+            main="Volatile Acidity by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p3 <- qplot(wine.r$quality,wine.r$citric.acid, ylab="Citric Acid", xlab=" Quality Rating", 
+            main="Citric Acid by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p4 <- qplot(wine.r$quality,wine.r$residual.sugar, ylab="Residual Sugar", xlab=" Quality Rating", 
+            main="Residual Sugar by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p5 <- qplot(wine.r$quality,wine.r$chlorides, ylab="Chlorides", xlab=" Quality Rating", 
+            main="Chlorides by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p6 <- qplot(wine.r$quality, wine.r$free.sulfur.dioxide, ylab="Free Sulfur Dioxide", xlab=" Quality Rating", 
+            main="Free Sulfur Dioxide by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p7 <- qplot(wine.r$quality,wine.r$total.sulfur.dioxide, ylab="Total Sulfur Dioxide", xlab=" Quality Rating", 
+            main="Total Sulfure Dioxide by Quality Level") + geom_boxplot() + 
+  geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p8 <- qplot(wine.r$quality,wine.r$density, ylab="Density", xlab=" Quality Rating", 
+            main="Density by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p9 <- qplot(wine.r$quality,wine.r$pH, ylab="pH", xlab=" Quality Rating", 
+            main="pH by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p10 <- qplot(wine.r$quality,wine.r$sulphates, ylab="Sulphates", xlab=" Quality Rating", 
+             main="Sulphates by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p11 <- qplot(wine.r$quality,wine.r$alcohol, ylab="Alcohol", xlab=" Quality Rating", 
+             main="Alcohol by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p12 <- qplot(wine.r$quality, xlab=" Quality Rating", 
+             main="Quality Ratings") + geom_histogram(fill="dark grey") + 
+  theme_light(base_size = 14)
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+grid.arrange(p5, p6, p7, p8, ncol = 2, nrow = 2)
+grid.arrange(p9, p10, p11, p12, ncol = 2, nrow = 2)
+```
+
+## Correlation Plots
+
+```{r corrplot, warning=FALSE, fig.width=11, fig.height=7}
+library(corrplot)
+cor.wine.r <- cor(wine.r[,-12])
+cor.wine.w <- cor(wine.w[,-12])
+
+par(mfrow=c(1,2))
+corrplot(cor.wine.r, method = "color", type="full", order="original", tl.cex = 0.6,
+         tl.col="black", tl.srt = 45, main="Attribute Correlations")
+
+corrplot(cor.wine.w, method = "color", type="full", order="original", tl.cex = 0.6,
+         tl.col="black", tl.srt = 45, main="Attribute Correlations")
+```
+
+## Pairs Plot with Additional Detail
+
+The bottom left of the matrix contains scatter plots, the upper right of the matrix contains the correlation between the two attributes, and the diagonal contain the variable histogram.
+
+```{r pairs, fig.width=11, fig.height=7}
+source("C:/_stuff/r.code.snippets/pairs.panels.R")
+par(mfrow=c(1,2))
+pairs(wine.r,lower.panel=panel.smooth, upper.panel=panel.cor,diag.panel=panel.hist, main="Red Wine Data Correlation Plots")
+pairs(wine.w,lower.panel=panel.smooth, upper.panel=panel.cor,diag.panel=panel.hist, main="White Wine Data Correlation Plots")
+```
+
+Variables with strong correlations. 
+
+In red wine, 
+* fixed.acidity and density have a 0.668 correlation coefficient; both are commparably correlated to the response, quality
+* fixed.acidity and citric.acid have a 0.672 correlation coefficient; citric.acid is more strongly correlated to the response, quality.
+* fixed.acidity and pH have a -0.683 correlation coefficient; fixed.acidity is more strongly correlated to the response, quality.
+* free.sulfur.dioxide and total sulfur dioxide have a 0.668 correlation coefficient; while total.sulfur.dioxide is more strongly correlated to the response, quality.
+
+
+In white wine, 
+* density and residual.sugar have a 0.839 correlation coefficient; density is more strongly correlated to the response, quality.
+* density and alcohol have a -0.780 correlation coefficient; both are almost equally correlated (in opposite directions) to the response, quality.
+* free.sulfur.dioxide and total.sulfur.dioxide have a 0.616 correlation coefficient;  total.sulfur.dioxide is more strongly correlated to the response, quality.
+
+After removing the correlated variables, prediction performance was not signnificantly improved, and in the case of white wine, was degraded slightly. All predictor variables will be kept.
+
+Red Wine Error Rate - Random Forest model using cross validation
+
+.          | Not Subset | Subset
+-----------|------------|-----------
+Not Scaled | 27.02% BEST| 27.7% 
+Scaled     | 28.02%     | 28.27%
+
+White Wine Error Rate - Random Forest model using cross validation
+
+.          | Not Subset | Subset
+-----------|------------|-----------
+Not Scaled | 28.5%      | 28.69% 
+Scaled     | 28.07% BEST| 29.01%
+
+Although the centered and scale the predictors deliver a slightly better prediction accuracy, the difference is not significant enough to justify the pre-processing of unseen data.
+
+An assessment of prediction performance when predictors were scaled and centered versus not indicated that pre-processing the predictors improved the accuracy of the prediction slightly. The data will be not be centered and scaled and predictors will not be removed.  
+
+```{r temp}
+# create temp data frames for analysis
+wine.rs <- wine.r
+wine.ws <- wine.w
+```
+
+# Separate into training and test data sets
+
+Separated 2/3 of observations into training set, and 1/3 of observations into the test set.
+
+```{r train.test.subset}
+train.ids.rs <- sample(nrow(wine.rs),(nrow(wine.rs)/3)*2)
+wine.rs.train <- wine.rs[train.ids.rs,]
+wine.rs.test <- wine.rs[-train.ids.rs,]
+
+train.ids.ws <- sample(nrow(wine.ws),(nrow(wine.ws)/3)*2)
+wine.ws.train <- wine.ws[train.ids.ws,]
+wine.ws.test <- wine.ws[-train.ids.ws,]
+```
+
+# Train the Models in Training Set
+
+Build model for red wine quality predictions. Although the document [Manual--Setting Up, Using, And Understanding Random Forests V4.0](http://www.stat.berkeley.edu/~breiman/Using_random_forests_v4.0.pdf) indicates that cross-validation is not needed to get an unbiased estimate of the test set error, it was used as best practice when building models.
+
+Build model to predict red wine quality rating. 
+
+```{r train.red}
+set.seed(10)
+m.winers.cv <- train(quality~., data=wine.rs.train, method="rf",
+                  trControl = trainControl(method = "cv"))
+m.winers.cv$finalModel
+```
+
+Build model to predict white wine quality rating.
+
+```{r train.white}
+set.seed(10) 
+m.winews.cv <- train(quality~., data=wine.ws.train, method="rf",
+                    trControl = trainControl(method = "cv"))
+m.winews.cv$finalModel
+```
+
+# Predict Quality Rating on Test Set
+
+Predict quality using the test sets. For each data set, red wine and white wine, the Accuracy and Error Rate are also calculated.
+
+```{r predict.test, echo=FALSE}
+#Predict red wine quality
+p.winers <- predict(m.winers.cv, wine.rs.test)
+#Accuracy, Error rate
+r.accuracy <- (sum(wine.rs.test$quality==p.winers))/length(wine.rs.test$quality)
+r.error <- 1-((sum(wine.rs.test$quality==p.winers))/length(wine.rs.test$quality))
+summary.red <- paste("Red Wine Test Set Prediction Accuracy: ",round(r.accuracy,2)," Error Rate: ",round(r.error,2))
+
+#Predict white wine quality
+p.winews <- predict(m.winews.cv, wine.ws.test)
+#Accuracy, error rate
+w.accuracy <- (sum(wine.ws.test$quality==p.winews))/length(wine.ws.test$quality)
+w.error <- 1-((sum(wine.ws.test$quality==p.winews))/length(wine.ws.test$quality))
+summary.white <- paste("White Wine Test Set Prediction Accuracy: ",round(w.accuracy,2)," Error Rate: ",round(w.error,2))
+
+print(summary.red)
+print(summary.white)
+
+```
+
+**Test Accuracy and Error Rates - Red Wine and White Wine Test Data**
+
+.             | Red Wine                | White Wine
+--------------|-------------------------|-----------
+Test Accuracy | `r round(r.accuracy,2)` | `r round(w.accuracy,2)` 
+Test Error    | `r round(r.error,2)`    | `r round(w.error,2)` 
+
+
+# References and Citations
+P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis.
+
+Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.
