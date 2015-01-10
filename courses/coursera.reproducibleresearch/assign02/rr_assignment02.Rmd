@@ -1,0 +1,345 @@
+---
+title: "Evaluation of Economic and Population Impact of Weather Event from 1950 to 2011"
+author: "Darion Lawson"
+output:
+  html_document:
+    toc: yes
+---
+
+##Synopsis
+The purpose of this report is evaluate which weather events in the United States from 1950 to 2011 that resulted in the largest populate health impact and in the largest economic impact.  
+
+This analysis uses the data from the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database that tracks the characteristics of major storms and weather events in the United States. Details about this data can be obtained from: https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf.  
+
+This report defines populate health impact as the number of injuries and deaths. It defines economic impact as the amount of crop damage and property damage.  
+
+
+##Data Processing
+
+Step 1. Import libraries needed to run this analysis.  
+```{r importlibraries}
+#Import libraries
+if("ggplot2" %in% rownames(installed.packages()) == FALSE) {
+    install.packages("ggplot2",
+                     repos=c("http://rstudio.org/_packages", "http://cran.rstudio.com"))}
+library(ggplot2) #to plot data
+
+if("dplyr" %in% rownames(installed.packages()) == FALSE) {
+    install.packages("dplyr",
+                     repos=c("http://rstudio.org/_packages", "http://cran.rstudio.com"))}
+library(dplyr) #to summarise data
+
+if("RCurl" %in% rownames(installed.packages()) == FALSE) {
+    install.packages("RCurl",
+                     repos=c("http://rstudio.org/_packages", "http://cran.rstudio.com"))}
+library(RCurl) #to download file in knitr
+
+if("grid" %in% rownames(installed.packages()) == FALSE) {
+    install.packages("grid",
+                     repos=c("http://rstudio.org/_packages", "http://cran.rstudio.com"))}
+library(grid) # required to call function unit()
+
+source("http://peterhaschke.com/Code/multiplot.R")  #multiplot
+
+```
+
+Step 2. Create the environment variables that will be used to download and read data from the source.  
+```{r environment, cache = TRUE}
+#set environment and variables
+setwd("F:/_education/_coursera.reproducibleresearch/assignments/assign02.files/")
+today <- Sys.Date() #to label the file with the download date
+
+a.url <- "https://d396qusza40orc.cloudfront.net/repdata/data/StormData.csv.bz2"
+a.zipfilename <- paste("StormData",today,"bz2", sep=".") #generate unique zip file name
+a.downloadfilepath <- paste(getwd(),a.zipfilename,sep="/") #location where file sill be dowloaded
+a.containedfilename <- paste("StormData",today,sep=".") #generate file name in bz2 file
+a.unziploc <- paste(getwd(),sep="/") #unzip location
+
+```
+
+
+Step 3. Download the file and read the data. This may take about 10 minutes.  
+```{r readdata, cache = TRUE}
+download.file(a.url,a.downloadfilepath,mode = "wb", method="curl")
+
+wdata <- read.table(bzfile(a.downloadfilepath), sep=",", 
+                    na.strings="", fill=TRUE,
+                    stringsAsFactors=FALSE,
+                    colClasses=c(rep("character",37)),
+                    header=TRUE)
+```
+
+Step 4. Prep the data frame with additional derived columns.  We'll do this work in a copy of the wdata table so we can back track if date becomes corrupt.  
+```{r processtable, cache = TRUE}
+#Set up new fields in table for derived data - population health and economic impact
+#create working data frame for analysis
+wdatatemp <- wdata 
+
+wdatatemp["POP_HEALTH"] <- as.numeric()
+wdatatemp["ECON_IMPACT"] <- as.numeric()
+wdatatemp$EVTYPE <- as.factor(wdatatemp$EVTYPE)
+wdatatemp$FATALITIES <- as.numeric(wdatatemp$FATALITIES)
+wdatatemp$INJURIES <- as.numeric(wdatatemp$INJURIES)
+wdatatemp$PROPDMG <- as.numeric(wdatatemp$PROPDMG)
+wdatatemp$CROPDMG <- as.numeric(wdatatemp$CROPDMG)
+```
+
+Step 5. Calculate the population health impact.  This is the sum of the number of fatalities and injuries.  
+```{r pophealth, cache=TRUE}
+#Define Population Impact as Fatalities and Injuries
+wdatatemp$POP_HEALTH <- wdatatemp$FATALITIES + wdatatemp$INJURIES
+```
+
+Step 6. Create fields to store the numeric multiplication factor when calculating the property damage and crop damage.
+```{r}
+#CROPDMG_FACTOR: is for crop damage
+#PROPDMG_FACTOR: is for Property damage
+#ECON_IMPACT: is for total Economic Impact, as the sum of Property Damage and Crop Damage
+wdatatemp$CROPDMG_FACTOR <- as.numeric(NA) 
+wdatatemp$PROPDMG_FACTOR <- as.numeric(NA)
+wdatatemp$ECON_IMPACT <- as.numeric(NA)
+```
+
+Step 7. We need to clean up some of the values in the CROPDMGEXP and PROPDMGEXP. In addition, we'll populate numeric values to the respective factor column (PROPDMG_FACTOR and CROPDMG_FACTOR) so they can be used in the Economic Impact calculation.
+```{r econhealth, cache=TRUE}
+#Define Economic Impact as Property Damage and Crop Damage
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMGEXP == "h" | wdatatemp$CROPDMGEXP == "H" ] <- 100 #hundreds
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMGEXP == "k" | wdatatemp$CROPDMGEXP == "K"] <- 1000 #thousands
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMGEXP == "m" | wdatatemp$CROPDMGEXP == "M" ] <- 1000000 #millions
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMGEXP == "b" | wdatatemp$CROPDMGEXP == "B" ] <- 1000000000 #billions
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMG == 0] <- 1 # use default factor 1
+wdatatemp$CROPDMG_FACTOR[wdatatemp$CROPDMGEXP %in% c("0",0,NA,"NA","?") ] <- 1 #define default value 1
+
+#populate the PROPDMG_FACTOR field
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMGEXP == "h" | wdatatemp$PROPDMGEXP == "H"] <- 100 
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMGEXP == "k" | wdatatemp$PROPDMGEXP == "K"] <- 1000
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMGEXP == "m" | wdatatemp$PROPDMGEXP == "M"] <- 1000000
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMGEXP == "b" | wdatatemp$PROPDMGEXP == "B"] <- 1000000000
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMG == 0 ] <- 1 #use default factor 1
+wdatatemp$PROPDMG_FACTOR[wdatatemp$PROPDMGEXP %in% c("0",0,NA,"NA","?") ] <- 1 #use default factor 1
+
+
+#remove 35 rows that have bad data that can't be resolved cleanly
+#work in a temp table 
+wdatatemp.good <- subset(wdatatemp,!(is.na(wdatatemp$PROPDMG_FACTOR)|is.na(wdatatemp$CROPDMG_FACTOR)))
+```
+
+Step 8. Now calculate the Economic Impact by multiplying the property damage value (PROPDMG) multiplied by its factor (PROPDMG_FACTOR) and adding this to the crop damage value (CROPDMG) multiplied its factor (CROPDMG_FACTOR).
+
+```{r calculateecon, cache=TRUE}
+#calculate economic impact
+wdatatemp.good$ECON_IMPACT <- (wdatatemp.good$PROPDMG * wdatatemp.good$PROPDMG_FACTOR) + (wdatatemp.good$CROPDMG * wdatatemp.good$CROPDMG_FACTOR) 
+
+#copy values back to  wdatatemp
+wdatatemp <- wdatatemp.good
+wdatatemp.good <- NULL
+
+```
+
+##Results
+In this report, we will look at two questions. 
+-Which types of events (EVTYPE) are most harmful with respect to population health?
+-Which types of events have the greatest economic consequences? 
+
+For each question, we'll look at two data points:
+- the total impact on population health from 1950 to 2011
+- the average number of injuries and deaths per event
+
+We'll also narrow the assessment to the view the top 5 weather events that cause the most impact in both categories. 
+
+From 1950 to 2011, Tornadoes have resulted in the most number of injuries and deaths for all events. However, heat waves on average result in the highest number of injuries and deaths per event.
+
+From 1950 to 2011, Floods have resulted in the largest economic impact for all events. However, "TORNADOES, TSTM WIND, HAIL" on average results in the largest economic impact per event.
+
+###Question 1: Which types of events (EVTYPE) are most harmful with respect to population health? 
+We define population health as the sum of both fatalities and injuries. First we group and summarize the data by event type.  
+
+```{r question1, cache=TRUE}
+wdata.sub.g <- group_by(wdatatemp, EVTYPE)
+w.summary.h <- summarise(wdata.sub.g,
+                       mean_health = mean(POP_HEALTH),
+                       total_health = sum(POP_HEALTH))
+
+#order the summary tables, , include only events with population impact
+w.summary.h.total <- arrange(subset(w.summary.h, total_health != 0), desc(total_health))
+w.summary.h.mean <- arrange(subset(w.summary.h, mean_health != 0), desc(mean_health))
+
+```
+
+Here is the code that generates these plots.  
+```{r question1code, fig.width=12, cache=TRUE, eval=FALSE}
+h1 <- ggplot(w.summary.h.total[1:5,],aes(x=EVTYPE,y=total_health)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(limits=c("TORNADO","EXCESSIVE HEAT","TSTM WIND","FLOOD","LIGHTNING")) +
+  ylim(0,120000) +
+  geom_text(aes(x = EVTYPE, y = total_health, label=w.summary.h.total[1:5,]$total_health),
+            vjust=-1, colour="black", fontface="bold") +
+  ggtitle("Top 5 Events with Highest Total Number \nof Injuries and Deaths,1950-2011 ") +
+  xlab("Weather Event Type") +
+  ylab("Number of Injuries and Deaths") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x=element_text(angle=45,hjust = 1),
+    plot.margin = unit(c(1,1,1,1), "cm"))
+
+
+h2 <- ggplot(w.summary.h.mean[1:5,],aes(x=EVTYPE, y=mean_health)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(limits=c("Heat Wave","TROPICAL STORM GORDON","WILD FIRES","THUNDERSTORMW","TORNADOES, TSTM WIND, HAIL")) +
+  ylim(0,100) +
+  geom_text(aes(x = EVTYPE, y = mean_health, label=w.summary.h.mean[1:5,]$mean_health),
+            vjust=-1, colour="black", fontface="bold") +
+  ggtitle("Top 5 Events with Highest Average Number \nof Injuries and Deaths, 1950-2011") +
+  xlab("Weather Event Type") +
+  ylab("Number of Injuries and Deaths") +
+  theme_bw(base_size = 12) +
+  theme(
+      axis.text.x=element_text(angle=45,hjust = 1),
+      plot.margin = unit(c(1,1,1,1), "cm"))
+
+multiplot(h1,h2,cols=2)
+
+```
+
+
+The top five weather events, from 1950-2011, with the largest total number of injuries and deaths.  
+```{r question1atable, cache=TRUE}
+w.summary.h.total[1:5,c(1,3)]
+
+```
+
+The top five weather events, from 1950-2011, with largest average number of injuries and deaths per event.  
+```{r question1btable, cache=TRUE}
+w.summary.h.mean[1:5,1:2]
+
+```
+
+And here are the plots themselves.  
+```{r question1plot, fig.width=15, echo=FALSE}
+h1 <- ggplot(w.summary.h.total[1:5,],aes(x=EVTYPE,y=total_health)) + 
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=c("TORNADO","EXCESSIVE HEAT","TSTM WIND","FLOOD","LIGHTNING")) +
+    ylim(0,120000)+
+    theme_bw(base_size = 12) +
+    theme(axis.text.x=element_text(angle=45,hjust = 1)) +
+    theme(plot.margin = unit(c(1,1,1,1), "cm")) +
+    geom_text(aes(x = EVTYPE, y = total_health,label=w.summary.h.total[1:5,]$total_health),
+              vjust=-1,colour="black",fontface="bold") +
+    ggtitle("Top 5 Events with Highest Total Number \nof Injuries and Deaths,1950-2011 ") +
+    xlab("Weather Event Type") +
+    ylab("Number of Injuries and Deaths")
+
+h2 <- ggplot(w.summary.h.mean[1:5,],aes(x=EVTYPE,y=mean_health)) + 
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=c("Heat Wave","TROPICAL STORM GORDON","WILD FIRES","THUNDERSTORMW","TORNADOES, TSTM WIND, HAIL")) +
+    ylim(0,100)+
+    theme_bw(base_size = 12) +
+    theme(axis.text.x=element_text(angle=45,hjust = 1)) +
+    theme(plot.margin = unit(c(1,1,1,1), "cm")) +
+    geom_text(aes(x = EVTYPE, y = mean_health,label=w.summary.h.mean[1:5,]$mean_health),
+              vjust=-1,colour="black",fontface="bold") +
+    ggtitle("Top 5 Events with Highest Average Number \nof Injuries and Deaths, 1950-2011") +
+    xlab("Weather Event Type") +
+    ylab("Number of Injuries and Deaths")
+
+multiplot(h1,h2,cols=2)
+
+```
+
+###Question 2: Which types of events have the greatest economic consequences? 
+
+We define Economic Impact by the combined dollar amount of crop damage and property damage.
+
+First, we group and summarize the data.  
+```{r question2, cache=TRUE}
+wdata.sub.g <- group_by(wdatatemp, EVTYPE)
+w.summary.e <- summarise(wdata.sub.g,
+                        mean_econ = mean(ECON_IMPACT),
+                        total_econ = sum(ECON_IMPACT))
+
+#order the summary tables, include only events with economic impact
+w.summary.e.total <- arrange(subset(w.summary.e, total_econ != 0), desc(total_econ))
+w.summary.e.mean <- arrange(subset(w.summary.e, mean_econ != 0), desc(mean_econ))
+
+```
+
+Here is the code that generates the plots. 
+```{r question2code, fig.width=15, fig.height=8, echo=TRUE}
+
+e1 <- ggplot(w.summary.e.total[1:5,],aes(x=EVTYPE,y=total_econ)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(limits=c("FLOOD","HURRICANE/TYPHOON","TORNADO","STORM SURGE","HAIL")) +
+  geom_text(aes(x = EVTYPE, y = total_econ,label=format(w.summary.e.total[1:5,]$total_econ,scientific=TRUE,digits = 3)),
+            vjust=1,colour="white",fontface="bold") +
+  ggtitle("Top 5 Events with Highest Total Economic Impact \nfrom Crop and Property Damage, 1950-2011") +
+  xlab("Weather Event Type") +
+  ylab("Economic Impact (U.S. dollars)") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x=element_text(angle=45,hjust = 1), 
+    plot.margin = unit(c(1,1,1,1), "cm"))
+
+e2 <- ggplot(w.summary.e.mean[1:5,],aes(x=EVTYPE,y=mean_econ)) + 
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=c("TORNADOES, TSTM WIND, HAIL",
+                              "HEAVY RAIN/SEVERE WEATHER","HURRICANE/TYPHOON",
+                              "HURRICANE OPAL","STORM SURGE")) +
+  geom_text(aes(x = EVTYPE, y = mean_econ,label=format(w.summary.e.mean[1:5,]$mean_econ,scientific=TRUE,digits = 3)),
+            vjust=1,colour="white",fontface="bold") +
+  ggtitle("Top 5 Events with Highest Average Economic Impact \nfrom Crop and Property Damage, 1950-2011") +
+  xlab("Weather Event Type") +
+  ylab("Economic Impact (U.S. dollars)") +
+  theme_bw(base_size = 12) +
+    theme(
+      axis.text.x=element_text(angle=45,hjust = 1),
+      plot.margin = unit(c(1,1,1,1), "cm"))
+
+
+multiplot(e1,e2,cols=2)
+```
+
+
+The top five weather events, between 1950-2011, that resulted in the largest total economic impact due to crop and property damage.  
+```{r question2atable, cache=TRUE}
+w.summary.e.total[1:5,c(1,3)]
+
+```
+
+The top five weather events that resulted in the largest average economic impact per event due to crop and property damage between 1950-2011.  
+```{r question2btable, cache=TRUE}
+w.summary.e.mean[1:5,1:2]
+
+```
+
+Here are the plots.  
+```{r question2plot, fig.width=15, fig.height=8, echo=TRUE}
+e1 <- ggplot(w.summary.e.total[1:5,],aes(x=EVTYPE,y=total_econ)) + 
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=c("FLOOD","HURRICANE/TYPHOON","TORNADO","STORM SURGE","HAIL")) +
+    theme_bw(base_size = 12) +
+    theme(axis.text.x=element_text(angle=45,hjust = 1)) +
+    theme(plot.margin = unit(c(1,1,1,1), "cm")) + 
+    geom_text(aes(x = EVTYPE, y = total_econ,label=format(w.summary.e.total[1:5,]$total_econ,scientific=TRUE,digits = 3)),
+              vjust=1,colour="white",fontface="bold") +
+    ggtitle("Top 5 Events with Highest Total Economic Impact \nfrom Crop and Property Damage, 1950-2011") +
+    xlab("Weather Event Type") +
+    ylab("Economic Impact (U.S. dollars)")
+
+e2 <- ggplot(w.summary.e.mean[1:5,],aes(x=EVTYPE,y=mean_econ)) + 
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=c("TORNADOES, TSTM WIND, HAIL",
+                              "HEAVY RAIN/SEVERE WEATHER","HURRICANE/TYPHOON",
+                              "HURRICANE OPAL","STORM SURGE")) +
+    #ylim(0,1200) +
+    theme_bw(base_size = 12) +
+    theme(axis.text.x=element_text(angle=45,hjust = 1)) +
+    theme(plot.margin = unit(c(1,1,1,1), "cm")) +
+    geom_text(aes(x = EVTYPE, y = mean_econ,label=format(w.summary.e.mean[1:5,]$mean_econ,scientific=TRUE,digits = 3)),
+              vjust=1,colour="white",fontface="bold") +
+    ggtitle("Top 5 Events with Highest Average Economic Impact \nfrom Crop and Property Damage, 1950-2011") +
+    xlab("Weather Event Type") +
+    ylab("Economic Impact (U.S. dollars)")
+
+multiplot(e1,e2,cols=2)
+
+```
