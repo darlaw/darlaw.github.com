@@ -1,0 +1,35 @@
+---
+title: "Coursera Exploratory Data Analysis Project 1"
+author: "Darion Lawson"
+output:
+  html_document:
+    toc: yes
+---
+
+# Overview
+
+This directory contains the source and output files that I created for Project 1 for the [Coursera Exploratory data analysis course](https://www.coursera.org/course/exdata) taught by professors at John Hopkins University.
+
+The purpose of this project was to  examine how household energy usage varies over a 2-day period in February, 2007. The original submission required that I reconstruct specific plots, but in this portfolio I have some fun with different plot types. 
+
+# Directory Contents:
+The assignment uses data from the UC Irvine Machine Learning Repository. 
+
+* household_power_consumption.txt: is the original data file supplied for the project. contains Measurements of electric power consumption in one household with a one-minute sampling rate over a period of almost 4 years. Different electrical quantities and some sub-metering values are available.
+
+* Each of the R files (Plot1.R, Plot2.R, Plot3.R, Plot4.R) creates one or more plots to answer a different question.
+
+* Each of the PNG image files is an image export of one plot corresponding to the respective R file (eg. plot1.png was created using Plot1.R)
+
+# Definitions
+These definitions are taken from the [Data Description] (https://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption)
+
+1.  Date: Date in format dd/mm/yyyy 
+2.  Time: time in format hh:mm:ss 
+3.	Global_active_power: household global minute-averaged active power (in kilowatt) 
+4.	Global_reactive_power: household global minute-averaged reactive power (in kilowatt) 
+5.	Voltage: minute-averaged voltage (in volt) 
+6.	Global_intensity: household global minute-averaged current intensity (in ampere) 
+7.	Sub_metering_1: energy sub-metering No. 1 (in watt-hour of active energy). It corresponds to the kitchen, containing mainly a dishwasher, an oven and a microwave (hot plates are not electric but gas powered). 
+8.	Sub_metering_2: energy sub-metering No. 2 (in watt-hour of active energy). It corresponds to the laundry room, containing a washing-machine, a tumble-drier, a refrigerator and a light. 
+9.	Sub_metering_3: energy sub-metering No. 3 (in watt-hour of active energy). It corresponds to an electric water-heater and an air-conditioner.
