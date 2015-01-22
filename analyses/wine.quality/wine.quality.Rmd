@@ -33,54 +33,112 @@ str(wine.w);str(wine.r)
 
 # Exploratory Data Analysis
 
-Plot the individual variables against quality.
-
-```{r plots, fig.width=9, fig.height=5, echo=FALSE}
+## Red Wine
+Plot the individual characteristics of Red Wine against quality rating.
+View these plots in [Tableau Public](https://public.tableausoftware.com/views/RedWineCharacteristics/RedWineDash_1?:embed=y&:display_count=no)
+```{r red.plots, fig.width=9, fig.height=5, echo=FALSE}
 #Individual plots
-p1 <- qplot(wine.r$quality,wine.r$fixed.acidity, ylab="Fixed Acidity", xlab=" Quality Rating", 
+r1 <- qplot(wine.r$quality,wine.r$fixed.acidity, ylab="Fixed Acidity", xlab=" Quality Rating", 
             main="Fixed Acidity by Quality Level")  + geom_boxplot() + geom_jitter(alpha=0.7) +
   theme_light(base_size = 14)
 
-p2 <- qplot(wine.r$quality,wine.r$volatile.acidity, ylab="Volatile Acidity", xlab=" Quality Rating", 
+r2 <- qplot(wine.r$quality,wine.r$volatile.acidity, ylab="Volatile Acidity", xlab=" Quality Rating", 
             main="Volatile Acidity by Quality Level") +
   geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p3 <- qplot(wine.r$quality,wine.r$citric.acid, ylab="Citric Acid", xlab=" Quality Rating", 
+r3 <- qplot(wine.r$quality,wine.r$citric.acid, ylab="Citric Acid", xlab=" Quality Rating", 
             main="Citric Acid by Quality Level") +
   geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p4 <- qplot(wine.r$quality,wine.r$residual.sugar, ylab="Residual Sugar", xlab=" Quality Rating", 
+r4 <- qplot(wine.r$quality,wine.r$residual.sugar, ylab="Residual Sugar", xlab=" Quality Rating", 
             main="Residual Sugar by Quality Level") +
   geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p5 <- qplot(wine.r$quality,wine.r$chlorides, ylab="Chlorides", xlab=" Quality Rating", 
+r5 <- qplot(wine.r$quality,wine.r$chlorides, ylab="Chlorides", xlab=" Quality Rating", 
             main="Chlorides by Quality Level") +
   geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p6 <- qplot(wine.r$quality, wine.r$free.sulfur.dioxide, ylab="Free Sulfur Dioxide", xlab=" Quality Rating", 
+r6 <- qplot(wine.r$quality, wine.r$free.sulfur.dioxide, ylab="Free Sulfur Dioxide", xlab=" Quality Rating", 
             main="Free Sulfur Dioxide by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p7 <- qplot(wine.r$quality,wine.r$total.sulfur.dioxide, ylab="Total Sulfur Dioxide", xlab=" Quality Rating", 
+r7 <- qplot(wine.r$quality,wine.r$total.sulfur.dioxide, ylab="Total Sulfur Dioxide", xlab=" Quality Rating", 
             main="Total Sulfure Dioxide by Quality Level") + geom_boxplot() + 
   geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
-p8 <- qplot(wine.r$quality,wine.r$density, ylab="Density", xlab=" Quality Rating", 
+r8 <- qplot(wine.r$quality,wine.r$density, ylab="Density", xlab=" Quality Rating", 
             main="Density by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
   theme_light(base_size = 14)
 
-p9 <- qplot(wine.r$quality,wine.r$pH, ylab="pH", xlab=" Quality Rating", 
+r9 <- qplot(wine.r$quality,wine.r$pH, ylab="pH", xlab=" Quality Rating", 
             main="pH by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
   theme_light(base_size = 14)
 
-p10 <- qplot(wine.r$quality,wine.r$sulphates, ylab="Sulphates", xlab=" Quality Rating", 
+r10 <- qplot(wine.r$quality,wine.r$sulphates, ylab="Sulphates", xlab=" Quality Rating", 
              main="Sulphates by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
   theme_light(base_size = 14)
 
-p11 <- qplot(wine.r$quality,wine.r$alcohol, ylab="Alcohol", xlab=" Quality Rating", 
+r11 <- qplot(wine.r$quality,wine.r$alcohol, ylab="Alcohol", xlab=" Quality Rating", 
              main="Alcohol by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
   theme_light(base_size = 14)
 
-p12 <- qplot(wine.r$quality, xlab=" Quality Rating", 
+r12 <- qplot(wine.r$quality, xlab=" Quality Rating", 
+             main="Quality Ratings") + geom_histogram(fill="dark grey") + 
+  theme_light(base_size = 14)
+
+grid.arrange(r1, r2, r3, r4, ncol = 2, nrow = 2)
+grid.arrange(r5, r6, r7, r8, ncol = 2, nrow = 2)
+grid.arrange(r9, r10, r11, r12, ncol = 2, nrow = 2)
+```
+
+## White Wine
+Plot the individual characteristics of Red Wine against quality rating.
+View these plots in [Tableau Public](https://public.tableausoftware.com/views/WhiteWineCharacteristics/WhiteWineDash_1?:embed=y&:display_count=no)
+```{r white.plots, fig.width=9, fig.height=5, echo=FALSE}
+#Individual plots
+p1 <- qplot(wine.w$quality,wine.w$fixed.acidity, ylab="Fixed Acidity", xlab=" Quality Rating", 
+            main="Fixed Acidity by Quality Level")  + geom_boxplot() + geom_jitter(alpha=0.7) +
+  theme_light(base_size = 14)
+
+p2 <- qplot(wine.w$quality,wine.w$volatile.acidity, ylab="Volatile Acidity", xlab=" Quality Rating", 
+            main="Volatile Acidity by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p3 <- qplot(wine.w$quality,wine.w$citric.acid, ylab="Citric Acid", xlab=" Quality Rating", 
+            main="Citric Acid by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p4 <- qplot(wine.w$quality,wine.w$residual.sugar, ylab="Residual Sugar", xlab=" Quality Rating", 
+            main="Residual Sugar by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p5 <- qplot(wine.w$quality,wine.w$chlorides, ylab="Chlorides", xlab=" Quality Rating", 
+            main="Chlorides by Quality Level") +
+  geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p6 <- qplot(wine.w$quality, wine.w$free.sulfur.dioxide, ylab="Free Sulfur Dioxide", xlab=" Quality Rating", 
+            main="Free Sulfur Dioxide by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p7 <- qplot(wine.w$quality,wine.w$total.sulfur.dioxide, ylab="Total Sulfur Dioxide", xlab=" Quality Rating", 
+            main="Total Sulfure Dioxide by Quality Level") + geom_boxplot() + 
+  geom_jitter(alpha=0.7) + theme_light(base_size = 14)
+
+p8 <- qplot(wine.w$quality,wine.w$density, ylab="Density", xlab=" Quality Rating", 
+            main="Density by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p9 <- qplot(wine.w$quality,wine.w$pH, ylab="pH", xlab=" Quality Rating", 
+            main="pH by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p10 <- qplot(wine.w$quality,wine.w$sulphates, ylab="Sulphates", xlab=" Quality Rating", 
+             main="Sulphates by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p11 <- qplot(wine.w$quality,wine.w$alcohol, ylab="Alcohol", xlab=" Quality Rating", 
+             main="Alcohol by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + 
+  theme_light(base_size = 14)
+
+p12 <- qplot(wine.w$quality, xlab=" Quality Rating", 
              main="Quality Ratings") + geom_histogram(fill="dark grey") + 
   theme_light(base_size = 14)
 
@@ -98,10 +156,10 @@ cor.wine.w <- cor(wine.w[,-12])
 
 par(mfrow=c(1,2))
 corrplot(cor.wine.r, method = "color", type="full", order="original", tl.cex = 0.6,
-         tl.col="black", tl.srt = 45, main="Attribute Correlations")
+         tl.col="black", tl.srt = 45, main="Red Wine Attribute Correlations")
 
 corrplot(cor.wine.w, method = "color", type="full", order="original", tl.cex = 0.6,
-         tl.col="black", tl.srt = 45, main="Attribute Correlations")
+         tl.col="black", tl.srt = 45, main="White Wine Attribute Correlations")
 ```
 
 ## Pairs Plot with Additional Detail
