@@ -8,8 +8,7 @@ output:
     toc: yes
 ---
 
-Thanks for viewing my portfolio. This directory contains projects and anlysis that I performe myself on freely available data. The technology used (R, Python. HTML/css/js) varies from project to project, as I continue to build the contents of this folder.
+Thanks for viewing my portfolio. This directory contains projects and anlysis that I performed on freely available data. The technology used varies from project to project.
 
-The contents are the following:
+* wine.quality: In this project, I used freely available wine quality data to predict quality rating. The model was built using a random forest algorithm with 11 predictors and a 6 value categorical predictor, quality rating.
 
-* wine.quality: In this project, I used freely available wine quality data to predict quality rating. Model build is random forest with 11 predictors and a 6 value categorical predictor - quality rating.
