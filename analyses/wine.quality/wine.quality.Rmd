@@ -9,7 +9,7 @@ output:
     
 ---
 # Introduction
-This analysis takes a look at physicochemical analysis data collected form red wine and white wine samples plus quality ratings assigned to each sample by wine experts. A random forest model is built to predict quality rating from the chemical properties of wine.
+This analysis takes a look at physico-chemical data collected form red wine and white wine samples plus quality ratings assigned to each sample by wine experts. A random forest model is built to predict quality rating from the chemical properties of wine.
 
 Data was obtained from [UCI Data Repository](http://archive.ics.uci.edu/ml/datasets/Wine+Quality) and was contributed by Paulo Cortez, University of Minho, Guimaraes, Portugal.
 
