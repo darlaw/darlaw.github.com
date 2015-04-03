@@ -15,11 +15,11 @@ Data was obtained from [UCI Data Repository](http://archive.ics.uci.edu/ml/datas
 
 # Import Packages
 ```{r importdata, message=FALSE, warning = FALSE, error=FALSE, results=FALSE}
-source("C:/_stuff/r.code.snippets/all.imports.R")
+source("all.imports.R")
 ```
 
 # Load Data
-There are two datasets one each for the red and white variants of the Portuguese "Vinho Verde" wine. The variables are chemical characterstics of the wines. The response is the Quality rating assigned by wine experts (the median of at least 3 evaluations) expert graded the wine quality. Ratings are 0 (very bad) and 10 (very excellent). 
+There are two datasets one each for the red and white variants of the Portuguese "Vinho Verde" wine. The variables are chemical characteristics of the wines. The response is the Quality rating assigned by wine experts (the median of at least 3 evaluations) expert graded the wine quality. Ratings are 0 (very bad) through 10 (excellent). 
 
 ```{r loaddata}
 wine.r <- read.csv("C:/_data/wine.quality/winequality-red.csv", sep=";")
@@ -187,7 +187,7 @@ In white wine,
 * density and alcohol have a -0.780 correlation coefficient; both are almost equally correlated (in opposite directions) to the response, quality.
 * free.sulfur.dioxide and total.sulfur.dioxide have a 0.616 correlation coefficient;  total.sulfur.dioxide is more strongly correlated to the response, quality.
 
-After removing the correlated variables, prediction performance was not signnificantly improved, and in the case of white wine, was degraded slightly. All predictor variables will be kept.
+After removing the correlated variables, prediction performance was not significantly improved, and in the case of white wine, was degraded slightly. All predictor variables will be kept.
 
 Red Wine Error Rate - Random Forest model using cross validation
 
