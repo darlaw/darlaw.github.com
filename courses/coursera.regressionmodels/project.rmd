@@ -10,20 +10,19 @@ output:
 ---
 # Executive Summary
 
-In the report we look at two goals:
+This report has two goals:
 
 * Determine whether an automatic or manual transmission better for MPG.
 * Quantify the MPG difference between automatic and manual transmissions.
 
-We look at correlation coefficients and the regression model to answer these questions.
-Upon assessment of the correlation between transmission type and gas mileage, we find that there is a correlation these two attributes. On average cars with automatic transmissions get better gas mileage. 
+Ths report looks at the correlation coefficient and the regression model to answer these questions. Results indicated that there is a correlation between transmission type and gas mileage. On average, cars with manual transmission also get better gas mileage.
 
-We also find that the quantified difference in gas mileage for automatic transmission (0) vs manual transmission (1) vehicles is a function of both the transmission type and the weight of the car.
+The report also finds that the quantified difference in gas mileage for automatic transmission (0) versus  manual transmission (1) vehicles is a function of both the transmission type and the weight of the car.
 
 # Is an automatic or manual transmission better for MPG?
 We're interested in evaluating the transmission type (am) against gas mileage (mpg). Transmission type appears to have significant correlation at almost 0.6, with a p-value of less then 0.001. A pairs plot of the two attributes shows the trend, correlation, and histogram.  
 
-In addition, a boxplot of gas mileage against automatic transmission versus manual transmission also demonstrates the difference. The median gas mileage for manual transmission is 22.8, whereas the median gas mileage for automatic transmission is 17.3. This data suggests that a manual transmission is better for gas mileage.
+In addition, a boxplot comparing gas mileage against both automatic transmission and manual transmission also demonstrates a difference. The median gas mileage for manual transmission is 22.8, whereas the median gas mileage for automatic transmission is 17.3. This data suggests that a manual transmission is better for gas mileage.
 
 ```{r echo=FALSE, fig.width=5, fig.height=4}
 par(mfcol=c(1,2))
@@ -42,7 +41,7 @@ plot(mtcars$am,mtcars$mpg,xlab="Transmission: \n(0 = automatic, 1 = manual)",
 
 # Quantify the MPG difference between automatic and manual transmissions.
 
-We've seen in the previous section that there is a correlation between transmission type (am) and gas mileage (mpg). There are also correlations between mpg when compared to cylinders (cyl), displacement (disp), rear axle ratio (drat), weight (wt), and number of forward gears (gear). We'll investigate these relationships further to identify the appropriate model to predict gas mileage from transmission type. The following pairs plot visually illustrates these relationships. 
+We've seen in the previous section that there is a correlation between transmission type (am) and gas mileage (mpg). There are also correlations between mpg when compared to cylinders (cyl), displacement (disp), rear axle ratio (drat), weight (wt), and number of forward gears (gear). We'll investigate these relationships further to identify the appropriate model that predicts gas mileage from transmission type. The following pairs plot visually illustrates these relationships. 
 
 ```{r echo=FALSE, fig.width=5}
 source("C:/_stuff/r.code.snippets/useful.pairs.plots.R")
@@ -51,14 +50,14 @@ pairs(mtcars[,c("mpg", "am","cyl", "disp", "drat", "wt", "gear")],lower.panel=pa
 
 Using backward stepwise regression, we find that the parsimonious multivariate model contains the variables: weight (wt), quarter mile time (qsec), and transmission type (am). The model was adjusted to add an interaction term between am and wt because analysis indicates there was a correlation between these variables. 
 
-The difference in gas mileage (mpg) for automatic transmission (0)  vs manual transmission (1) is a function of both the transmission type (am) and the weight of the car (wt). If you look only at transmission type, manual transmission vehicles get, on average, 14.079428 miles per gallon better gas mileage than automatic transmission. However, that does not tell the complete story. The prediction model includes an interaction term for transmission type (am) and weight (wt). Taking this term into account, the average difference in gas mileage is approximately 14.079428 minus 4.141376 multiplied by the weight value of the car. This means that for a 1000 lb car, holding all other variables constant, the increase in gas mileage gained by manual transmission would be on average 9.938052.
+The difference in gas mileage (mpg) for automatic transmission (0) vs manual transmission (1) is a function of both the transmission type (am) and the weight of the car (wt). If you look only at transmission type, manual transmission vehicles get, on average, 14.079428 miles per gallon better gas mileage than automatic transmission. However, that does not tell the complete story. The prediction model includes an interaction term for transmission type (am) and weight (wt). Taking this term into account, the average difference in gas mileage is approximately 14.079428 minus 4.141376 multiplied by the weight value of the car. This means that for a 1000 lb car, holding all other variables constant, the increase in gas mileage gained by manual transmission would be on average 9.938052.
 
 ```{r echo=FALSE}
 fit.final.4 <- lm(mpg ~ wt + qsec + am + am*wt, data=mtcars)
 summary(fit.final.4)$call #Model
 summary(fit.final.4)$coefficients #Coefficients
 ```
-The adjusted r-squared is 0.8804219. The model explains approximately 88% of the variability in the response, Gas Mileage (mpg).
+The adjusted r-squared is 0.8804219. This model explains approximately 88% of the variability in the response, Gas Mileage (mpg).
 
 ```{r echo=FALSE}
 summary(fit.final.4)$adj.r.square
@@ -101,7 +100,7 @@ plot(abs(fit.final.4$resid)~fit.final.4$fitted, xlab="Fitted Values", ylab="Abso
 
 **Are the Residuals Independent?**
 
-The residuals appear to be Independent, and there does not appear to be a time-based trend.
+The residuals appear to be independent and there does not appear to be a time-based trend.
 ```{r echo=FALSE, fig.height=4}
 par(mfcol=c(1,2))
 plot(fit.final.4$resid, ylab="Residual Values"); abline(0,0, col="grey")
