@@ -22,14 +22,13 @@ The original submission was much more concise that the the files here. After the
 
 * summarySCC_PM25.rds: is the PM2.5 Emissions Data for 1999, 2002, 2005, and 2008.
 
-* Each of the R files (Plot1.R, Plot2.R, Plot3.R, Plot4.R, Plot5.R, Plot6.R) creates one or plots to answer a different question.
+Each of the R files (Plot1.R, Plot2.R, Plot3.R, Plot4.R, Plot5.R, Plot6.R) creates a plot to answer a different question.
 
-* Each of the PNG image files is an image export of one plot corresponding to the respective R file (eg. plot1.1.png was created using Plot1.R)
+Each of the PNG image files is an image export of one plot corresponding to the respective R file (eg. plot1.1.png was created using Plot1.R)
 
 # Definitions
 These definitions are taken from (http://www.epa.gov/ttn/chief/net/2008inventory.html)
 
-Some of the definitions 
 * Point: "..sources that are individually inventoried and usually located at a fixed, stationary location, although portable sources such as some asphalt or rock crushing operations are also included"
 
 * NonPoint: "...sources which individually are too small in magnitude or too numerous to inventory as individual point sources, and which can often be estimated more accurately as a single aggregate source for a County or Tribal area. Examples are residential heating and consumer solvent use"
