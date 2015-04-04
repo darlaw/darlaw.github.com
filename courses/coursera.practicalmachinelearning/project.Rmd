@@ -92,7 +92,7 @@ confusionMatrix(pred.rf,trg.nona.test$classe)
 
 ```
 
-NOTE: Because building an random forest model is time intensive (particularly in a knitr   environment), this output was copied from the original script file.
+NOTE: Because building a random forest model is time intensive (particularly in a knitr   environment), this output was copied from the original script file.
 
 ```{r eval=FALSE}
 Confusion Matrix and Statistics
