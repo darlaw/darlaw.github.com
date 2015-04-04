@@ -12,14 +12,11 @@ This directory contains the source and output files that I created for Project 1
 
 The purpose of this project was to  examine how household energy usage varies over a 2-day period in February, 2007. The original submission required that I reconstruct specific plots, but in this portfolio I have some fun with different plot types. 
 
-# Directory Contents:
-The assignment uses data from the UC Irvine Machine Learning Repository. 
-
-* household_power_consumption.txt: is the original data file supplied for the project. contains Measurements of electric power consumption in one household with a one-minute sampling rate over a period of almost 4 years. Different electrical quantities and some sub-metering values are available.
-
-* Each of the R files (Plot1.R, Plot2.R, Plot3.R, Plot4.R) creates one or more plots to answer a different question.
-
-* Each of the PNG image files is an image export of one plot corresponding to the respective R file (eg. plot1.png was created using Plot1.R)
+# Directory Contents
+The assignment uses data from the UC Irvine Machine Learning Repository.
+The household_power_consumption.txt file is the original data file supplied for the project. It contains measurements of electric power consumption in one household with a one-minute sampling rate over a period of almost 4 years. Different electrical quantities and some sub-metering values are available.
+Each of the R files (Plot1.R, Plot2.R, Plot3.R, Plot4.R) creates one or more plots that each answer a different question.
+Each of the PNG image files is an image export of one plot corresponding to the respective R file (eg. plot1.png was created using Plot1.R)
 
 # Definitions
 These definitions are taken from the [Data Description] (https://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption)
