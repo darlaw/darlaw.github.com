@@ -22,7 +22,11 @@ library(ggplot2) # to plot data
 ```
 
 ```
-## Need help? Try the ggplot2 mailing list: http://groups.google.com/group/ggplot2.
+## Warning: package 'ggplot2' was built under R version 3.1.3
+```
+
+```
+## Error: package or namespace load failed for 'ggplot2'
 ```
 
 ```r
@@ -33,25 +37,19 @@ library(dplyr) # to summarise data
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.1.2
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
+## Error: package or namespace load failed for 'dplyr'
 ```
 
 ```r
 setwd("C:/_portfolio/courses/_coursera.reproducibleresearch/assign01") 
-today <- Sys.Date() # to label the file withthe download date
+```
+
+```
+## Error in setwd("C:/_portfolio/courses/_coursera.reproducibleresearch/assign01"): cannot change working directory
+```
+
+```r
+today <- Sys.Date() # to label the file with the download date
 ```
 ## Step 2: Loading and preprocessing the data  
 This code downloads the file to the working directory, unzips, and then loads that data 
@@ -71,7 +69,7 @@ download.file(a.url,a.downloadfilepath,mode = "wb",method="curl")
 ```
 ## Warning: running command 'curl
 ## "https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip" -o
-## "C:/_portfolio/courses/_coursera.reproducibleresearch/assign01/assignments/activity.2014-11-14.zip"'
+## "C:/_portfolio/github/darlaw.github.com/courses/coursera.reproducibleresearch/assign01/assignments/activity.2015-04-04.zip"'
 ## had status 127
 ```
 
@@ -128,7 +126,7 @@ data and remove instances where the steps value for all intervals is NA.
 ```
 
 ```
-## Error in group_by_(.data, .dots = lazyeval::lazy_dots(...), add = add): object 'adata.sub' not found
+## Error in eval(expr, envir, enclos): could not find function "group_by"
 ```
 
 ```r
@@ -138,7 +136,7 @@ data and remove instances where the steps value for all intervals is NA.
 ```
 
 ```
-## Error in summarise_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata.sub.g' not found
+## Error in eval(expr, envir, enclos): could not find function "summarise"
 ```
 
 ```r
@@ -146,7 +144,7 @@ data and remove instances where the steps value for all intervals is NA.
 ```
 
 ```
-## Error in arrange_(.data, .dots = lazyeval::lazy_dots(...)): object 'a.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "arrange"
 ```
 
 Then, create the histograms plots one for median values and the second for mean values. Notice the median plot has no data. The median value for each day is zero.  
@@ -161,7 +159,7 @@ ggplot(a.summary,aes(x=date, y=median_steps)) +
 ```
 
 ```
-## Error in ggplot(a.summary, aes(x = date, y = median_steps)): object 'a.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
 ```r
@@ -174,10 +172,10 @@ ggplot(a.summary,aes(x=date, y=mean_steps)) +
 ```
 
 ```
-## Error in ggplot(a.summary, aes(x = date, y = mean_steps)): object 'a.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
-Now, lets show a table with the mean and median number of steps taken each day.      
+Now show a table with the mean and median number of steps taken each day.      
 
 ```r
     a.summary
@@ -213,7 +211,7 @@ adata2.sub.g <- group_by(adata2.sub, interval)
 ```
 
 ```
-## Error in group_by_(.data, .dots = lazyeval::lazy_dots(...), add = add): object 'adata2.sub' not found
+## Error in eval(expr, envir, enclos): could not find function "group_by"
 ```
 
 ```r
@@ -222,7 +220,7 @@ a2.summary <- summarise(adata2.sub.g,
 ```
 
 ```
-## Error in summarise_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata2.sub.g' not found
+## Error in eval(expr, envir, enclos): could not find function "summarise"
 ```
 
 ```r
@@ -230,7 +228,7 @@ a2.summary <- arrange(a2.summary, interval)
 ```
 
 ```
-## Error in arrange_(.data, .dots = lazyeval::lazy_dots(...)): object 'a2.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "arrange"
 ```
 
 Then, make a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). There are many ways to do this. Here are the variations.  
@@ -259,7 +257,7 @@ ggplot(a2.summary,aes(x=interval, y=mean_steps)) +
 ```
 
 ```
-## Error in ggplot(a2.summary, aes(x = interval, y = mean_steps)): object 'a2.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
 ```r
@@ -273,7 +271,7 @@ ggplot(a2.summary,aes(x=interval, y=mean_steps)) +
 ```
 
 ```
-## Error in ggplot(a2.summary, aes(x = interval, y = mean_steps)): object 'a2.summary' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
 ```r
@@ -353,7 +351,7 @@ adata3.g.i <- group_by(adata3.sub, interval) # group data
 ```
 
 ```
-## Error in group_by_(.data, .dots = lazyeval::lazy_dots(...), add = add): object 'adata3.sub' not found
+## Error in eval(expr, envir, enclos): could not find function "group_by"
 ```
 
 ```r
@@ -362,7 +360,7 @@ adata3.sum.by.interval <- summarise(adata3.g.i,
 ```
 
 ```
-## Error in summarise_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata3.g.i' not found
+## Error in eval(expr, envir, enclos): could not find function "summarise"
 ```
 
 ```r
@@ -436,7 +434,7 @@ adata3.g.d <- group_by(adata3, date) # group by date
 ```
 
 ```
-## Error in group_by_(.data, .dots = lazyeval::lazy_dots(...), add = add): object 'adata3' not found
+## Error in eval(expr, envir, enclos): could not find function "group_by"
 ```
 
 ```r
@@ -446,7 +444,7 @@ adata3.summary.derived.date.mean <- summarise(adata3.g.d,
 ```
 
 ```
-## Error in summarise_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata3.g.d' not found
+## Error in eval(expr, envir, enclos): could not find function "summarise"
 ```
 
 ```r
@@ -454,7 +452,7 @@ adata3.summary.derived.date.mean <- arrange(adata3.summary.derived.date.mean, me
 ```
 
 ```
-## Error in arrange_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata3.summary.derived.date.mean' not found
+## Error in eval(expr, envir, enclos): could not find function "arrange"
 ```
 
 ```r
@@ -467,7 +465,7 @@ ggplot(adata3.summary.derived.date.mean,aes(x=date, y=mean_steps)) +
 ```
 
 ```
-## Error in ggplot(adata3.summary.derived.date.mean, aes(x = date, y = mean_steps)): object 'adata3.summary.derived.date.mean' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
 ```r
@@ -480,7 +478,7 @@ ggplot(adata3.summary.derived.date.mean,aes(x=date, y=median_steps)) +
 ```
 
 ```
-## Error in ggplot(adata3.summary.derived.date.mean, aes(x = date, y = median_steps)): object 'adata3.summary.derived.date.mean' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
 Calculate and report the mean and median total number of steps taken per day.  
@@ -555,7 +553,7 @@ adata4.g.d <- group_by(adata4, part.of.week, interval) # group by
 ```
 
 ```
-## Error in group_by_(.data, .dots = lazyeval::lazy_dots(...), add = add): object 'adata4' not found
+## Error in eval(expr, envir, enclos): could not find function "group_by"
 ```
 
 ```r
@@ -564,7 +562,7 @@ a.summary.adata4 <- summarise(adata4.g.d,
 ```
 
 ```
-## Error in summarise_(.data, .dots = lazyeval::lazy_dots(...)): object 'adata4.g.d' not found
+## Error in eval(expr, envir, enclos): could not find function "summarise"
 ```
 
 ```r
@@ -572,7 +570,7 @@ a.summary.adata4 <- arrange(a.summary.adata4, mean_steps)
 ```
 
 ```
-## Error in arrange_(.data, .dots = lazyeval::lazy_dots(...)): object 'a.summary.adata4' not found
+## Error in eval(expr, envir, enclos): could not find function "arrange"
 ```
 
 ```r
@@ -587,6 +585,6 @@ ggplot(a.summary.adata4, aes(x=interval, y=mean_steps)) +
 ```
 
 ```
-## Error in ggplot(a.summary.adata4, aes(x = interval, y = mean_steps)): object 'a.summary.adata4' not found
+## Error in eval(expr, envir, enclos): could not find function "ggplot"
 ```
 
