@@ -1,10 +1,11 @@
-  ---
+---
 title: "Coursera Getting and Cleaning Data Project"
 author: "Darion Lawson"
 output:
   html_document:
     toc: yes
 ---
+
 ### Introduction
 
 This document provides a description about the scripts and data. It also contains instructions to run the project.
@@ -37,7 +38,7 @@ To run this example:
 2. Locate the line with the value: #**TODO:
 
 3. Change the argument in the setwd() function to the location of the run_analysis.R 
-   and other project files. Each line in the run_analysis.R file must be executed equentially. 
+   and other project files. Each line in the run_analysis.R file must be executed sequentially. 
    Each task is organized into sections and described as a separate step.
 
 4. The tidy dataset will be written to the project working directory (defined by the 'setwd' function).
