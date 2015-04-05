@@ -11,7 +11,7 @@ The goal of this report is to identify and build a model that will predict motio
 In this report, multiple algorithms were evaluated. The most accurate prediction model was created using the random forest algorithm. The cross validation model accuracy on the full training data set was quite good at 99.56%. The out of sample error is expected to be approximately 0.44%.
 
 # Method
-First, set up the environment. Change the the working directory to the location of the R project files, and load the libraries.
+First, set up the environment. Change the working directory to the location of the R project files, and load the libraries.
 
 ```{r eval=FALSE}
 
@@ -20,7 +20,7 @@ setwd("E:/_education/_coursera.practicalmachinelearning/project")
 if("caret" %in% rownames(installed.packages()) == FALSE) {
   install.packages("caret",
                    repos=c("http://rstudio.org/_packages", "http://cran.rstudio.com"))}
-library(caret) #machine learning healper package
+library(caret) #machine learning helper package
 
 if("RWeka" %in% rownames(installed.packages()) == FALSE) {
   install.packages("RWeka",
@@ -67,9 +67,9 @@ trg.nona.test.vars <- trg.nona.test[,-53]
 
 ```
 
-I trained multiple models using the pre-processed training data using different algorithms (J48, ctree, gbm, LMT, C5.0, ada, rpart2, treebag, blackboost, bstTree). I chose the Random Forest algorithm. Although the time to train is quite long, random forest algorithm results in the best prediction performance. Model accuracy is approximately 98.98% on the pre-processed training data . Other than variable subsetting, no additional data cleaning or preprocessng was performed.
+I trained multiple models using the pre-processed training data using different algorithms (J48, ctree, gbm, LMT, C5.0, ada, rpart2, treebag, blackboost, bstTree). I chose the Random Forest algorithm. Although the time to train is quite long, random forest algorithm results in the best prediction performance. Model accuracy is approximately 98.98% on the pre-processed training data . Other than subsetting certain variables, no additional data cleaning or preprocessing was performed.
 
-I used ten fold cross-validation while building the model. However, according to [Random Forest reference documentation](See:http://www.stat.berkeley.edu/~breiman/Using_random_forests_V3.1.pdf), there is no need for cross-validation to get an unbiased estimate of the test set error.
+I used tenfold cross-validation while building the model. However, according to [Random Forest reference documentation](See:http://www.stat.berkeley.edu/~breiman/Using_random_forests_V3.1.pdf), there is no need for cross-validation to get an unbiased estimate of the test set error.
 
 ```{r eval=FALSE}
 m.trg <- train(classe~., data=trg.nona.train, method="rf",
