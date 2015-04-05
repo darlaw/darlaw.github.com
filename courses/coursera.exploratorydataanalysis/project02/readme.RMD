@@ -12,7 +12,7 @@ This directory contains the source and output files that I created for Project 2
 
 The purpose of this project was to answer specific pollution-related questions using data from the National Emissions Inventory database about fine particulate matter pollution in the United States over the 10 year period 1999 to 2008.
 
-The original submission was much more concise that the the files here. After the course, I spent some time investigating other approaches to aggregated the data, and create plots.
+The original submission was much more concise that the files here. After the course, I spent some time investigating other approaches to aggregated the data, and create plots.
 
 # Directory Contents:
 
