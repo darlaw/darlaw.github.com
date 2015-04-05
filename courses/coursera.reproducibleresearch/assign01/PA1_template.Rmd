@@ -27,7 +27,7 @@ if("dplyr" %in% rownames(installed.packages()) == FALSE) {
 library(dplyr) # to summarise data
 
 setwd("C:/_portfolio/courses/_coursera.reproducibleresearch/assign01") 
-today <- Sys.Date() # to label the file withthe download date
+today <- Sys.Date() # to label the file with the download date
 
 ```
 ## Step 2: Loading and preprocessing the data  
@@ -85,7 +85,7 @@ ggplot(a.summary,aes(x=date, y=mean_steps)) +
 
 ```
 
-Now, lets show a table with the mean and median number of steps taken each day.      
+Now show a table with the mean and median number of steps taken each day.      
 ```{r echo=TRUE}
     a.summary
 ```
