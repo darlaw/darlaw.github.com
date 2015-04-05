@@ -1,4 +1,3 @@
----
 title: "Evaluation of Economic and Population Impact of Weather Event from 1950 to 2011"
 author: "Darion Lawson"
 output:
@@ -51,7 +50,7 @@ today <- Sys.Date() #to label the file with the download date
 
 a.url <- "https://d396qusza40orc.cloudfront.net/repdata/data/StormData.csv.bz2"
 a.zipfilename <- paste("StormData",today,"bz2", sep=".") #generate unique zip file name
-a.downloadfilepath <- paste(getwd(),a.zipfilename,sep="/") #location where file sill be dowloaded
+a.downloadfilepath <- paste(getwd(),a.zipfilename,sep="/") #location where file will be downloaded
 a.containedfilename <- paste("StormData",today,sep=".") #generate file name in bz2 file
 a.unziploc <- paste(getwd(),sep="/") #unzip location
 
@@ -152,7 +151,7 @@ From 1950 to 2011, Tornadoes have resulted in the most number of injuries and de
 From 1950 to 2011, Floods have resulted in the largest economic impact for all events. However, "TORNADOES, TSTM WIND, HAIL" on average results in the largest economic impact per event.
 
 ###Question 1: Which types of events (EVTYPE) are most harmful with respect to population health? 
-We define population health as the sum of both fatalities and injuries. First we group and summarize the data by event type.  
+We define population health as the sum of both fatalities and injuries. First, we group and summarize the data by event type.  
 
 ```{r question1, cache=TRUE}
 wdata.sub.g <- group_by(wdatatemp, EVTYPE)
