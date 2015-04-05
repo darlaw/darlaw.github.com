@@ -62,7 +62,7 @@ r6 <- qplot(wine.r$quality, wine.r$free.sulfur.dioxide, ylab="Free Sulfur Dioxid
             main="Free Sulfur Dioxide by Quality Level") + geom_boxplot() + geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
 r7 <- qplot(wine.r$quality,wine.r$total.sulfur.dioxide, ylab="Total Sulfur Dioxide", xlab=" Quality Rating", 
-            main="Total Sulfure Dioxide by Quality Level") + geom_boxplot() + 
+            main="Total Sulfur Dioxide by Quality Level") + geom_boxplot() + 
   geom_jitter(alpha=0.7) + theme_light(base_size = 14)
 
 r8 <- qplot(wine.r$quality,wine.r$density, ylab="Density", xlab=" Quality Rating", 
@@ -176,7 +176,7 @@ pairs(wine.w,lower.panel=panel.smooth, upper.panel=panel.cor,diag.panel=panel.hi
 Variables with strong correlations. 
 
 In red wine, 
-* fixed.acidity and density have a 0.668 correlation coefficient; both are commparably correlated to the response, quality
+* fixed.acidity and density have a 0.668 correlation coefficient. Both are also correlated to the response, quality.
 * fixed.acidity and citric.acid have a 0.672 correlation coefficient; citric.acid is more strongly correlated to the response, quality.
 * fixed.acidity and pH have a -0.683 correlation coefficient; fixed.acidity is more strongly correlated to the response, quality.
 * free.sulfur.dioxide and total sulfur dioxide have a 0.668 correlation coefficient; while total.sulfur.dioxide is more strongly correlated to the response, quality.
@@ -205,7 +205,7 @@ Scaled     | 28.07% BEST| 29.01%
 
 Although the centered and scale the predictors deliver a slightly better prediction accuracy, the difference is not significant enough to justify the pre-processing of unseen data.
 
-An assessment of prediction performance when predictors were scaled and centered versus not indicated that pre-processing the predictors improved the accuracy of the prediction slightly. The data will be not be centered and scaled and predictors will not be removed.  
+An assessment of prediction performance when predictors were scaled and centered versus not indicates that pre-processing the predictors improved the accuracy of the prediction slightly. The data will be not be centered or scaled. Predictors will not be removed.  
 
 ```{r temp}
 # create temp data frames for analysis
