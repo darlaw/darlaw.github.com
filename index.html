@@ -1,69 +1,90 @@
 <html>
 	<head>
 		<title> Darion Lawson</title>
-		<LINK REL=StyleSheet HREF="markdown2.css" TYPE="text/css">
+		<LINK REL=StyleSheet HREF="base.css" TYPE="text/css">
 	</head>
 
 	<body>
-		<h1>Darion Lawson</h1>
+		<h1>Darion Lawson</h1> 
+		<a href="https://www.linkedin.com/profile/view?id=2566203">LinkedIn</a>
 		<p>
-			<a href="https://www.linkedin.com/profile/view?id=2566203">LinkedIn Profile</a>
+			These examples analyze various data sets. Analysis was done in R, python, or Tableau Public.
 		</p>
-		<p>
-			This repository contains code samples I've written to expand my analytics and data science skillset.
-			These samples are written in R. There's a bit of data analysis and some model building.
-		</p>
-					<table vspace="15" width="90%" cellspacing="3">
-						<tr valign="top" bordercolor="black">
-							<td>
-								<b>Model to predict </br>Wine Quality Rating in R</b>
-							</td>
-							<td align="top">
-							I used <a href="http://archive.ics.uci.edu/ml/datasets/Wine+Quality"  target="_blank">white and red wine data</a> to create a model that predicts the quality rating from chemical attributes of the wine.
-							The model was built using a random forest algorithm. The data contains 11 chemical measurements as predictors and a categorical predictor: quality. 
-								<a href="https://github.com/darlaw/darlaw.github.com/tree/master/analyses" target="_blank">View the code</a>
-							</td>
-						</tr>
+		<hr width="90%" align="left">
+		<h2>Data Analysis using R</h2>
+		<table vspace="15" width="90%" cellspacing="3">
+			<tr valign="top" bordercolor="black">
+				<td valign="top" width="20%"><b>Predicting how an expert <br/> might rate the quality of wine </b></td>
+				<td align="top"> 
+					The data set contains chemical measurements from white and red wine variants of the Portuguese Vinho Verde wine.<br/>
+					This model is used  to predict the quality rating based on chemical attributes of the wine.<br/>
+					It uses a random forest algorithm in R. The data contains 11 chemical attributes and a categorical target: quality rating.<br/>
+					Data is from <a href="http://archive.ics.uci.edu/ml/datasets/Wine+Quality"  target="_blank"> UCI Machine Learning repository</a>
+					<p/>
+					<a href="https://github.com/darlaw/darlaw.github.com/tree/master/analyses" target="_blank">See the code.</a>
+					<hr>
+					</td>
+			</tr>
+			<tr>
+				<td valign= "top" width="20%"><b>Coursera Projects </b></td>
+				<td align="top" >
+					Importing and cleaning data.
+					<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.cleaningdata/">See the code.</a></br>
+					<p/>
+					Import data and create a set of exploratory charts. 
+					<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.exploratorydataanalysis">See the code.</a></br>
+					<p/>
+					Create a multiple regression model on auto data. 
+					<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.regressionmodels">See the code.</a></br>
+					<p/>
+					Create a prediction model using data collected from wearable accelerometers.
+					<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.practicalmachinelearning">See the code.</a></br>					
+				</td>
+			</tr>
+			</table>
+			
+		<!-- ......................................................................... -->
+		<hr width="90%" align="left">
+		<h2>Tableau Plots</h2>
+		<table vspace="15" width="90%" cellspacing="3">
+			<tr>
+				<td valign="top" width="20%">
+					<b>White Wine and Red Wine </br>
+						Exploratory Plots in Tableau</b></td>
+				<td valign="top" >These plots are similar to the exploratory plots created in R, but are created in Tableau.
 
-					</table>
-
-
-					Projects completed for a specific course.
-					<ul>
-						<li>
-							Getting and Cleaning Data course offered by Coursera:  </br>
-							Used R to import and clean data.</br>
-							<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.cleaningdata/">View the project directory</a></br>
-							<a href="https://www.coursera.org/course/getdata">Learn more about the course.</a>
-						</li>
-						<li>
-							Exploratory Data Analysis course offered by Coursera: </br>
-							Used R to import data and create a set of exploratory charts. </br> 
-							<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.exploratorydataanalysis">Browse the project directory</a></br>	
-							<a href="https://www.coursera.org/course/exdata">Learn more about the course.</a>
-						</li>
-						<li>
-							Reproducible Research course offered by Coursera: </br>
-							Used R to import and clean data, create a set of exploratory charts, and report data analyses in a reproducible manner.</br>
-							<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.reproducibleresearch">Browse the project directory</a></br>	
-							<a href="https://www.coursera.org/course/repdata">Learn more about the course.</a>
-						</li>
-						<li>
-							Regression Models course offered by Coursera: </br>
-							Used R to create a mutliple regression model on auto data. </br>
-							<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.regressionmodels">Browse the project directory</a></br>	
-							<a href="https://www.coursera.org/course/regmods">Learn more about the course.</a>
-						</li>
-						<li>
-							Practical Machine Learning course offered by Coursera: </br> 
-							Use R to create a prediction model using data collected by wearable accelerometers.</br>
-							<a href="https://github.com/darlaw/darlaw.github.com/tree/master/courses/coursera.practicalmachinelearning">Browse the project directory</a></br>	
-							<a href="https://www.coursera.org/course/predmachlearn">Learn More about the course.</a>
-						</li>
-					</ul>
-
-
-		</p>
-
+					<p>
+						<a href="https://public.tableau.com/profile/darlaws#!/vizhome/VinhoVerdeWhiteWIneCharacteristics/WhiteWineDash-1?:embed=y&:display_count=no" target="_blank">White Wine Plots</a>
+					</p>
+					<p>
+						<a href="https://public.tableau.com/profile/darlaws#!/vizhome/RedWineCharacteristics/RedWineDash_1?:embed=y&:display_count=no" target="_blank">Red Wine Plots #1</a></p>
+					</p>
+					<p>
+						<a href="https://public.tableau.com/profile/darlaws#!/vizhome/RedVinhoVerdeCharacteristics/AbouttheWine?:embed=y&:display_count=no" target="_blank">Red Wine Plots #2</a></p>
+					</p>
+					
+				<hr>
+				</td>
+			</tr>
+			<tr>	
+				<td  valign="top" width="20%"><b>World Per Capita Residential Electricity Consumption</b></td>
+				<td valign="top" >This report presents residential electricity consumed per person, in kilowatt-hours (kWh), during the years 1960 - 2008. </br>
+				Data comes from <a href="http://www.gapminder.org" target="_blank">Gapminder</a>.
+				
+					<p>	
+						<a href="https://public.tableausoftware.com/views/ResidentialPerCapitaElectricityConsumptionWorld/Home?:embed=y&:display_count=no" target="_blank">View the Dashboard</a>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<hr>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
 	</body>
 </html>
